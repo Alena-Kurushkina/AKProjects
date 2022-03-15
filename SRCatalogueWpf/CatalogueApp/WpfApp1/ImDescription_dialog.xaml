@@ -1,0 +1,29 @@
+﻿<Window x:Class="WpfApp1.ImDescription_dialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="Введите описание" SizeToContent="WidthAndHeight"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" x:Name="textbl" Margin="20,5"></TextBlock>
+
+        <TextBox HorizontalContentAlignment="Left" Name="descBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="45" MaxLength="75" VerticalAlignment="Center" BorderThickness="2" Background="LightGray" TextWrapping="Wrap" Padding="5,0" VerticalScrollBarVisibility="Auto" Margin="10,20"/>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" FlowDirection="RightToLeft" Grid.ColumnSpan="2">
+            <Button Margin="0 0 10 0" IsCancel="True" Width="100" Height="30">Отмена</Button>
+            <Button IsDefault="True" Click="Accept_Click" Width="100" Height="30"  Margin="0,0,10,0">OK</Button>
+        </StackPanel>
+    </Grid>
+</Window>

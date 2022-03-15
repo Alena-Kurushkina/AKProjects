@@ -1,0 +1,162 @@
+﻿<UserControl x:Class="WpfApp1.Views.Pages.Helix3Dmodel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
+              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadModel}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="boolToVisibilityConverter" />
+            
+        </Grid.Resources>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        
+        
+        <hx:Viewport3DX Grid.Column="0"
+             x:Name="Viewport"          
+               Background="Gray"
+                Camera="{Binding Camera}"
+                CameraMode="Inspect"                        
+                CameraRotationMode="Turntable"
+                EffectsManager="{Binding EffectsManager}"
+                FXAALevel="Low"
+                >
+            <!---->
+            <hx:Viewport3DX.InputBindings>
+                <KeyBinding Key="B" Command="hx:ViewportCommands.BackView"/>
+                <KeyBinding Key="F" Command="hx:ViewportCommands.FrontView" />
+                <KeyBinding Key="T" Command="hx:ViewportCommands.TopView" />
+                <KeyBinding Key="O" Command="hx:ViewportCommands.BottomView" />
+                <KeyBinding Key="L" Command="hx:ViewportCommands.LeftView" />
+                <KeyBinding Key="R" Command="hx:ViewportCommands.RightView" />
+                <KeyBinding Command="hx:ViewportCommands.ZoomExtents" Gesture="Control+E" />
+                <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="RightClick" />
+                <MouseBinding Command="hx:ViewportCommands.Zoom" Gesture="MiddleClick" />
+                <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="LeftClick" />
+            </hx:Viewport3DX.InputBindings>
+            <hx:AmbientLight3D Color="#363636"/>
+            <hx:DirectionalLight3D Direction="{Binding Camera.LookDirection}" Color="#D6D6D6" />
+            <!--<hx:EnvironmentMap3D IsRendering="{Binding RenderEnvironmentMap}" Texture="{Binding EnvironmentMap}" />-->
+            <hx:Element3DPresenter Content="{Binding GroupModel}"/>
+            <hx:PostEffectMeshBorderHighlight EffectName="highlight" />
+            <i:Interaction.Triggers>
+                <i:DataTrigger Binding="{Binding IsLoading}" Value="false">
+                    <i:InvokeCommandAction Command="{Binding ZoomExt}" CommandParameter="{Binding ElementName=Viewport}"/>
+                </i:DataTrigger>
+            </i:Interaction.Triggers>
+        </hx:Viewport3DX>
+        
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="0" Width="200" Margin="10">
+            <TextBlock FontSize="11" Foreground="Gray" Text="Клавиша F - вид спереди"/>
+            <TextBlock FontSize="11" Foreground="Gray" Text="Клавиша B - вид сзади"/>
+            <TextBlock FontSize="11" Foreground="Gray" Text="Клавиша T - вид сверху"/>
+            <TextBlock FontSize="11" Foreground="Gray" Text="Клавиша O - вид снизу"/>
+            <TextBlock FontSize="11" Foreground="Gray" Text="Клавиша R - вид справа"/>
+            <TextBlock FontSize="11" Foreground="Gray" Text="Клавиша L - вид слева"/>
+            <TextBlock FontSize="11" Foreground="Gray" Text="Скролл - масштабирование" TextWrapping="Wrap"/>
+            <TextBlock FontSize="11" Foreground="Gray" Text="ПКМ - вращение модели"  TextWrapping="Wrap"/>
+            <TextBlock FontSize="11" Foreground="Gray" Text="ЛКМ - движение камеры"  TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <Grid
+            Grid.Column="0"
+            Visibility="{Binding IsLoading, Converter={StaticResource boolToVisibilityConverter}}" Background="Gray"
+            >
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <TextBlock Foreground="White">Loading Model</TextBlock>
+                <ProgressBar
+                    Style="{StaticResource MaterialDesignCircularProgressBar}"
+                    Value="0"
+                    IsIndeterminate="True" />
+            </StackPanel>
+        </Grid>
+
+
+        <Grid            
+            Grid.Column="1"
+            Width="250"
+            VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel
+                Margin="4"
+                HorizontalAlignment="Stretch"
+                Orientation="Vertical">
+                
+                <!--<Button Command="{Binding ResetCameraCommand}">
+                    Reset Camera
+                </Button>-->
+                  
+                    <Button Click="Button_Click" Background="{StaticResource PrimaryHueDarkBrush}" BorderThickness="0">
+                        Reset Camera
+                    </Button>
+
+                <CheckBox Margin="4" IsChecked="{Binding ShowWireframe}">Показать сетку</CheckBox>
+                <!--<CheckBox Margin="4" IsChecked="{Binding ElementName=Viewport, Path=EnableSSAO}">Enable SSAO</CheckBox>-->
+                <!--<CheckBox Margin="4" IsChecked="{Binding RenderEnvironmentMap}">Render EnvironmentMap</CheckBox>-->
+                <CheckBox Margin="4" IsChecked="{Binding RenderFlat}">Равномерное затенение</CheckBox>
+                <!--<CheckBox Margin="4" IsChecked="{Binding ElementName=Viewport, Path=EnableSSAO}">Enable SSAO</CheckBox>-->
+                <Separator />
+                <CheckBox Margin="4" IsChecked="{Binding EnableAnimation}">Включить анимацию</CheckBox>
+                <TextBlock>Выбор анимации</TextBlock>
+                <ComboBox
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding Animations}"
+                    SelectedItem="{Binding SelectedAnimation}" />
+
+                <!--<TextBlock>Scene Graph</TextBlock>-->
+            </StackPanel>
+            
+            
+
+            <TreeView Grid.Row="1" Margin="7" Visibility="{Binding TreeVisibility}" ItemsSource="{Binding GroupModel.GroupNode.Items}" TreeViewItem.Selected="TreeView_Selected">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="IsSelected" Value="{Binding Tag.Selected, Mode=TwoWay}" />
+                        <Setter Property="IsExpanded" Value="{Binding Tag.Expanded, Mode=TwoWay}" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
+
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                        <TextBlock Text="{Binding Name}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Tag.Selected}" Value="true">
+                                            <Setter Property="Background" Value="LightBlue" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
+
+        </Grid>
+
+
+    </Grid>
+</UserControl>

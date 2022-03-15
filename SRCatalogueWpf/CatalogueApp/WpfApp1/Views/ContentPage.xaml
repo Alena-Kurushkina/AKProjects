@@ -1,0 +1,136 @@
+﻿<Page x:Class="WpfApp1.Views.ContentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1.Views"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:viewmodels="clr-namespace:WpfApp1.ViewModels.Pages"
+      xmlns:views="clr-namespace:WpfApp1.Views.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"      
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Описание проекта" 
+      
+       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+         TextElement.FontWeight="Regular"
+         TextElement.FontSize="13"
+         TextOptions.TextFormattingMode="Ideal"
+         TextOptions.TextRenderingMode="Auto"
+         Background="{DynamicResource MaterialDesignPaper}"
+         FontFamily="{DynamicResource MaterialDesignFont}" >
+    
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Unloaded">
+            <i:InvokeCommandAction Command="{Binding Closing}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
+    <Page.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:DescriptionViewModel}">
+            <views:DescriptionView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:ThreeDModelViewModel}">
+            <views:ThreeDModelView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:QRCodeViewModel}">
+            <views:QRCodeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:VideoViewModel}">
+            <views:VideoView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:Helix3DmodelViewModel}">
+            <views:Helix3Dmodel/>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid>
+        <DockPanel>
+            <materialDesign:ColorZone
+                DockPanel.Dock="Top"
+                Mode="PrimaryLight"
+                Padding="10"            
+                >
+                <DockPanel>
+                    <Button 
+                        x:Name="Edit_button"
+                        DockPanel.Dock="Right"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                        Background="{StaticResource SecondaryHueMidBrush}"
+                        BorderBrush="{StaticResource SecondaryHueMidBrush}"
+                        Margin="5"  
+                        VerticalAlignment="Center" Click="Edit_button_Click"                         
+                        Visibility="{Binding Path=IsAdmin}"
+                            >
+                        <materialDesign:PackIcon
+                            Kind="EditOutline"                            
+                            Height="24"
+                            Width="24"/>
+                    </Button>
+
+                    <StackPanel x:Name="stpanel" DockPanel.Dock="Left" Orientation="Horizontal" HorizontalAlignment="Stretch" >
+
+                        <Button 
+                        x:Name="BackButton"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                            Background="{StaticResource SecondaryHueMidBrush}"
+                            BorderBrush="{StaticResource SecondaryHueMidBrush}"
+                        Margin="5"  
+                        VerticalAlignment="Center" Click="Button_Click"
+                                                                       
+                         >
+                            <materialDesign:PackIcon
+                            Kind="ArrowLeft"                            
+                            Height="24"
+                            Width="24"/>
+                        </Button>
+
+                        <ItemsControl ItemsSource="{Binding PageViewModels}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button 
+                                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                                    Margin="5"
+                                    Background="{StaticResource PrimaryHueDarkBrush}"                                       
+                                    Command="{Binding DataContext.ChangePageCommand, RelativeSource={RelativeSource AncestorType={x:Type Page}}}"
+                                    CommandParameter="{Binding }"
+                                    >
+                                        <materialDesign:PackIcon
+                                        Kind="{Binding Path=Icon}"
+                                        Height="24"
+                                        Width="24" />
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel  Orientation="Horizontal" VerticalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+
+                        <!--<Button 
+                            x:Name="ModelButton"
+                          Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                          ToolTip="MaterialDesignFloatingActionMiniDarkButton"
+                            Margin="5"  
+                            Background="#FF296400"  
+                        VerticalAlignment="Center" 
+                           Click="DisplayModel_Click"
+                            IsEnabled="{Binding Path=NoModel}">
+                            <materialDesign:PackIcon
+                            Kind="CubeOutline"                            
+                            Height="24"
+                            Width="24"/>
+                        </Button>-->
+
+                        
+                    </StackPanel>                    
+                        <TextBlock Margin="7,0" FontSize="20" Text="{Binding ProjectName}" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="White"/>
+                </DockPanel>
+            </materialDesign:ColorZone>
+            <ContentControl x:Name="contentControl" Content="{Binding CurrentPageViewModel}" />
+        </DockPanel>
+
+    </Grid>
+</Page>

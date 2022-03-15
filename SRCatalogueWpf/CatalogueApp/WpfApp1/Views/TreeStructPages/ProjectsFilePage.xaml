@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="WpfApp1.Views.TreeStructPages.ProjectsFilePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApp1.Views.TreeStructPages"   
+             xmlns:c="clr-namespace:WpfApp1"  
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.Resources>
+            <c:ArrayMultiValueConverter x:Key="MyArrayMultyValueConverter"/>
+        </Grid.Resources>
+        <DockPanel>
+            <materialDesign:ColorZone BorderBrush="Gray" BorderThickness="2,0,0,0"
+                                      DockPanel.Dock="Bottom" Height="65" Background="LightGray">
+                <StackPanel>
+                    
+                    <TextBlock Margin="7,3,0,2" VerticalAlignment="Top" HorizontalAlignment="Left">Добавить строку</TextBlock>
+                    
+                    <Grid Margin="7,0,7,3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="3" Name="ExButton" FontSize="10" Height="20" Width="90" Content="Добавить"
+                                Command="{Binding Path=AddProject}" CommandParameter="{Binding ElementName=MainDataGrid}">                                                        
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsAnyErrors}" Value="False">
+                                            <Setter Property="IsEnabled" Value="True"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <TextBox Name="namebox" Grid.Column="0" Margin="0,0,7,0" Padding="2,0,2,0"  Background="White" materialDesign:HintAssist.Hint="Название раздела">
+                            <TextBox.Text><!--Text="{Binding ProjectName}"-->
+                                <Binding Path="ProjectName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <DataErrorValidationRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                           
+                        </TextBox>
+                        <TextBox Name="idbox" Grid.Column="1" Margin="7,0,7,0" Padding="2,0,2,0"  Background="White" materialDesign:HintAssist.Hint="ID родителя">
+                            <TextBox.Text>
+                                <!--Text="{Binding ParentId}"-->
+                                <Binding Path="ParentId" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <DataErrorValidationRule ValidatesOnTargetUpdated="True"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <CheckBox Name="contbox" Grid.Column="2" Content="Контент"  IsChecked="{Binding IsContent}" />
+                        
+                    </Grid>
+                </StackPanel>
+
+            </materialDesign:ColorZone>
+            <!--<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" BorderBrush="Gray" BorderThickness="2">-->           
+                <DataGrid x:Name="MainDataGrid" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" 
+                    BorderBrush="Gray" BorderThickness="2,0,0,0" 
+                    CanUserSortColumns="True" CanUserAddRows="True"                   
+                    AutoGenerateColumns="False" 
+                    materialDesign:DataGridAssist.CellPadding="13 8 8 8"
+                    materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+                    ItemsSource="{Binding TreeFileItems, Mode=TwoWay}" 
+                     >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="CellEditEnding">
+                        <i:InvokeCommandAction Command="{Binding ElementName=MainDataGrid, Path=DataContext.CellEditEnd}" CommandParameter="{Binding ElementName=MainDataGrid, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Height="18" Width="18" Background="White" BorderBrush="White" materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
+                                            Command="{Binding DataContext.DeleteProject, ElementName=MainDataGrid}" CommandParameter="{Binding }"><!---->
+                                        <materialDesign:PackIcon
+                                            Kind="WindowClose"
+                                            Height="16"
+                                            Width="16"
+                                            Foreground="Gray"/>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Path=ID}"/>
+                        <DataGridTextColumn Header="Название раздела" Width="600" Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="ID родителя" Binding="{Binding Path=Pid, UpdateSourceTrigger=PropertyChanged}" />
+                        <!--<DataGridCheckBoxColumn Header="Контент" Binding="{Binding Path=Content}" />-->
+                        <DataGridTemplateColumn Header="Контент">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                <CheckBox IsChecked="{Binding Path=Content, Mode=OneWay}"
+                                          Command="{Binding DataContext.UncheckedEvent, ElementName=MainDataGrid}" CommandParameter="{Binding}" >                                              
+                                    
+                                </CheckBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                    </DataGrid.Columns>
+                </DataGrid>            
+            <!--</ScrollViewer>-->
+        </DockPanel>
+    </Grid>
+</UserControl>

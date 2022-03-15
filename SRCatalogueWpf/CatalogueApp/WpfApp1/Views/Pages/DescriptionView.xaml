@@ -1,0 +1,175 @@
+﻿<UserControl x:Class="WpfApp1.Views.Pages.DescriptionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApp1.Views.Pages"
+             xmlns:c="clr-namespace:WpfApp1"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             
+             Unloaded="UserControl_Unloaded"
+             >
+    <UserControl.Resources>
+       <c:UriToBitmapImageConverter x:Key="MyImageConverter"/> 
+    </UserControl.Resources>
+    <Grid Background="LightGray">               
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="0.30*"/>
+            <RowDefinition Height="0.27*" MaxHeight="80"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <GridSplitter Grid.Column="1"  Grid.RowSpan="4" ShowsPreview="False" Width="5" Background="DarkGray"
+        HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+        <GridSplitter Grid.Row="1" Grid.Column="0"  Height="5" Background="DarkGray"
+        HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+
+       
+        <!--<materialDesign:Card Grid.RowSpan="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="7,5,5,5" Background="White">-->
+        <RichTextBox x:Name="richtb" Grid.RowSpan="3" Grid.Column="2" Padding="7" Margin="7,7,7,0"
+                     c:RichTextBoxHelper.DocumentRTF="{Binding Document}" Background="White" Foreground="Black" 
+                     ScrollViewer.VerticalScrollBarVisibility="Visible" IsReadOnly="True"/>
+        <!--</materialDesign:Card>-->
+       
+
+        <materialDesign:Card Margin="7" Grid.Row="3" Grid.Column="2" Background="White">
+              
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="1.2*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1.2*" SharedSizeGroup="group1"/>
+                    <RowDefinition Height="*" SharedSizeGroup="group1"/>
+                    <RowDefinition Height="*" SharedSizeGroup="group1"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource SecondaryHueLightBrush}">
+                    <Viewbox HorizontalAlignment="Left">
+                        <TextBlock Background="{StaticResource SecondaryHueLightBrush}" Text="Контактная информация" FontWeight="DemiBold" Padding="3"/>
+                    </Viewbox>
+                </Border>
+                <Viewbox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding ContOrg}" Margin="3,3,3,0" Foreground="Black" TextWrapping="Wrap"/>
+                </Viewbox>
+                <Viewbox Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding ContFio}" Margin="3,0,3,3" Foreground="Black" TextWrapping="Wrap"/>
+                </Viewbox>
+                <Viewbox Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBlock  Text="Тел.:" Margin="3" Foreground="Black" FontWeight="DemiBold"/>
+                        <TextBlock  Text="{Binding ContTel}" Margin="0,3,3,3" Foreground="Black" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Viewbox>
+                <Viewbox Grid.Row="1" Grid.Column="2" Grid.RowSpan="2">
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBlock  Text="Email:" Margin="3" Foreground="Black" FontWeight="DemiBold"/>
+                        <TextBlock  Text="{Binding ContEmail}" Margin="0,3,3,3" Foreground="Black" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Viewbox>
+            </Grid>
+             
+            </materialDesign:Card>
+           
+        
+
+        <!--<materialDesign:Card Grid.Row="3" Grid.Column="2" Margin="5,0,5,5" BorderThickness="10" BorderBrush="{StaticResource SecondaryHueMidBrush}">
+            <Grid Margin="7" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="Контактная информация" Margin="3" Foreground="Black" FontSize="14" FontWeight="DemiBold"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding ContOrg}" Margin="3,3,3,0" Foreground="Black" TextWrapping="Wrap"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding ContFio}" Margin="3,0,3,3" Foreground="Black" TextWrapping="Wrap"/>
+                <StackPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Orientation="Horizontal">
+                    <TextBlock  Text="Тел.:" Margin="3" Foreground="Black"/>
+                    <TextBlock  Text="{Binding ContTel}" Margin="0,3,3,3" Foreground="Black" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Orientation="Horizontal">
+                    <TextBlock  Text="Email:" Margin="3" Foreground="Black"/>
+                    <TextBlock  Text="{Binding ContEmail}" Margin="0,3,3,3" Foreground="Black" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>-->
+
+        <ListBox x:Name="piclist" ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Images}" SelectedItem="{Binding SelectedImage}">
+                        
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    
+                    <materialDesign:Card Background="White">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Width="110" Height="110" >
+                            <Image Source="{Binding Path, Converter={StaticResource MyImageConverter}}" Stretch="Uniform" />
+                        </Border>
+                        <TextBlock Grid.Row="1" TextWrapping="Wrap" Width="110" Height="30" FontSize="12"
+                                   ToolTip="{Binding Path=Title}" TextTrimming="WordEllipsis" 
+                                   VerticalAlignment="Center" Text="{Binding Path=Title}"
+                                   Padding="3"
+                                   />
+                        </Grid> 
+                    </materialDesign:Card>
+                   
+                </DataTemplate>                
+            </ListBox.ItemTemplate>
+          
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center"/>
+                </ItemsPanelTemplate>
+             </ItemsControl.ItemsPanel>
+                       
+        </ListBox>
+
+
+        
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+            
+                                             
+                <!--
+                materialDesign:ColorZoneAssist.Mode="PrimaryDark"
+                Header="{Binding SelectedImage.Title}"
+                HorizontalContentAlignment="Center"                
+                Margin="7">-->
+            <materialDesign:Card Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Background="White" Margin="7"/>
+
+            <Image Grid.Column="0" Grid.Row="0" Stretch="Uniform" Margin="10" Source="{Binding SelectedImage.Path, Converter={StaticResource MyImageConverter}}"/>
+           
+                <TextBlock Grid.Column="0" Grid.Row="1" Margin="10" FontSize="14" TextWrapping="Wrap" TextTrimming="WordEllipsis" TextAlignment="Center" VerticalAlignment="Center"  Text="{Binding SelectedImage.Title}"/>
+            
+            <!--<materialDesign:Card Grid.Column="0" Grid.Row="0" Background="White" Margin="5,5,5,0">
+                    <Image  Stretch="Uniform"  Source="{Binding SelectedImage.Path, Converter={StaticResource MyImageConverter}}"/>
+                </materialDesign:Card>
+                <materialDesign:Card Grid.Column="0" Grid.Row="1" Background="White" Margin="5,0,5,5">
+                    <TextBlock TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" FontSize="15" Margin="5" Text="{Binding SelectedImage.Title}"/>
+                </materialDesign:Card>-->
+            </Grid>
+        
+
+
+    </Grid>
+</UserControl>
